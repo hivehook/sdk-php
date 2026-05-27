@@ -1,6 +1,6 @@
 {
   "name": "hivehook/sdk",
-  "description": "Official Hivehook PHP SDK. Manage sources, destinations, subscriptions, applications, endpoints, and verify inbound webhook signatures.",
+  "description": "Official PHP client for Hivehook, webhook infrastructure for modern teams (inbound and outbound).",
   "type": "library",
   "license": "MIT",
   "keywords": ["hivehook", "webhook", "webhooks", "graphql", "sdk"],
