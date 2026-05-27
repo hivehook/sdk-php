@@ -20,6 +20,26 @@ class StreamSinkService extends BaseService
         return $this->transport->execute($query, $vars)['streamSinks'];
     }
 
+    public function iterate(array $options = []): \Generator
+    {
+        $streamId = $options['streamId'] ?? '';
+        unset($options['streamId']);
+        $offset = $options['offset'] ?? 0;
+        while (true) {
+            $options['offset'] = $offset;
+            $conn = $this->list($streamId, $options);
+            $nodes = $conn['nodes'] ?? [];
+            foreach ($nodes as $node) {
+                yield $node;
+            }
+            $pageInfo = $conn['pageInfo'] ?? [];
+            if (empty($pageInfo['hasNextPage']) || count($nodes) === 0) {
+                break;
+            }
+            $offset += count($nodes);
+        }
+    }
+
     public function get(string $id): ?array
     {
         $query = 'query($id: UUID!) { streamSink(id: $id) { ' . self::FRAGMENT . ' } }';
