@@ -28,6 +28,7 @@ use Hivehook\Resources\StreamSinkService;
 use Hivehook\Resources\OrganizationService;
 use Hivehook\Resources\UserService;
 use Hivehook\Resources\AuditLogService;
+use Hivehook\Resources\MetaEventConfigService;
 
 class HivehookClient
 {
@@ -55,6 +56,7 @@ class HivehookClient
     public readonly OrganizationService $organizations;
     public readonly UserService $users;
     public readonly AuditLogService $auditLogs;
+    public readonly MetaEventConfigService $metaEventConfigs;
 
     public function __construct(
         string $baseUrl = 'http://localhost:8080',
@@ -87,5 +89,6 @@ class HivehookClient
         $this->organizations = new OrganizationService($transport);
         $this->users = new UserService($transport);
         $this->auditLogs = new AuditLogService($transport);
+        $this->metaEventConfigs = new MetaEventConfigService($transport);
     }
 }

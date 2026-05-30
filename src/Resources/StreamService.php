@@ -42,4 +42,24 @@ class StreamService extends BaseService
         $query = 'mutation($id: UUID!) { deleteStream(id: $id) }';
         return $this->transport->execute($query, ['id' => $id])['deleteStream'];
     }
+
+    private const ENTRY_FRAGMENT = 'id streamId sequence messageId eventType payload createdAt';
+
+    public function entries(string $streamId, ?int $afterSequence = null, ?int $limit = null): array
+    {
+        $query = 'query($streamId: UUID!, $afterSequence: Int, $limit: Int) {
+            streamEntries(streamId: $streamId, afterSequence: $afterSequence, limit: $limit) {
+                nodes { ' . self::ENTRY_FRAGMENT . ' }
+                pageInfo { total limit offset endCursor hasNextPage }
+            }
+        }';
+        $vars = ['streamId' => $streamId];
+        if ($afterSequence !== null) {
+            $vars['afterSequence'] = $afterSequence;
+        }
+        if ($limit !== null) {
+            $vars['limit'] = $limit;
+        }
+        return $this->transport->execute($query, $vars)['streamEntries'];
+    }
 }
